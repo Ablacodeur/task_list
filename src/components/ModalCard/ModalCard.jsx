@@ -96,7 +96,7 @@ export default function ModalCard() {
 
   return (
     <React.Fragment>
-    {tasks.map((task,id)=>( 
+      {tasks.map((task,id)=>( 
       
       <Button
         variant="outlined"
@@ -107,7 +107,46 @@ export default function ModalCard() {
       >
       <CardComponent key={id} task={task} />    
     </Button>
+    
     ))}
+
+    <Button 
+                variant="outlined"
+                color='neutral'
+                onClick={() => setOpen(true)}
+                sx={{ 
+                  display: 'flex', 
+                  height:'62px', 
+                  flexDirection: 'row', 
+                  alignItems: 'center',
+                  backgroundColor:'#F5E8D5',
+                  justifyContent: 'flex-start',
+                  padding: '2px 15px', 
+                  gap: '8px',  
+                  color:'black'                                
+                }} >
+              <Box sx={{ 
+                  width:'42px', 
+                    height:'42px', 
+                    backgroundColor:'#E9A23B',
+                    display:'flex',
+                    justifyContent:'center',
+                    alignItems:'center',
+                    borderRadius:'5px',
+                    
+                  
+                    }}>
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="9" fill="#F8FAFC" fill-opacity="0.25"/>
+                <path d="M12 8L12 16" stroke="#F8FAFC" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M16 12L8 12" stroke="#F8FAFC" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+
+                </Box>
+                <Typography variant="" x={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Add new task</Typography>
+
+              </Button>           
+
 
 
       <Modal
