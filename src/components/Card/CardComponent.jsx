@@ -10,7 +10,11 @@ export default function CardComponent({ task }) {
         width: '100%',
         height: '65px',
         borderRadius: '10px',
-        backgroundColor: '#A0ECB1',
+        backgroundColor: 
+            task.status === 'In Progress' ? '#F5D565' : 
+            task.status === 'Completed' ? '#A0ECB1' : 
+            task.status === "Won't do" ? '#F7D4D3' : 
+            '#E3E8EF',
         padding: '4px',
         display: 'flex',
         flexDirection: 'row',
@@ -60,8 +64,8 @@ export default function CardComponent({ task }) {
             borderRadius: '5px'
           }}
         >
-          {task.statusIcon ? task.statusIcon : null}
-        </Box>
+          {task.statusicon && <img src={task.statusicon} alt="icon" style={{ maxWidth: '60%', maxHeight: '60%' }} />}
+          </Box>
       </Stack>
     </Card>
   )

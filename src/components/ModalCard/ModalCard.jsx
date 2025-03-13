@@ -11,6 +11,10 @@ import { Box, Checkbox,Typography } from "@mui/material";
 import CardComponent from "../Card/CardComponent";
 import { Grid, Textarea } from "@mui/joy";
 import axios from 'axios';
+import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
+import { CircularProgress } from "@mui/material";
+// import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -21,11 +25,9 @@ export default function ModalCard() {
   const [tasks, setTasks]= React.useState([]);
   const [statusName,setStatusName]= React.useState('');
   const [selectedStatus, setSelectedStatus] = React.useState('');
+  // const navigate = useNavigate
 
 
-  const completedButtonRef = React.useRef(null);
-  const inProgressButtonRef = React.useRef(null);
-  const wontDoButtonRef = React.useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,14 +50,34 @@ export default function ModalCard() {
       
     }}
     function statusClick(event) {
-      const clickedStatus = event.target.name; 
+      console.log(event.target.value);
+      const clickedStatus = event.currentTarget.getAttribute('name'); 
+      const statusIcon = event.currentTarget.querySelector('img')?.src;
+          console.log(statusIcon);
+      
       console.log("Clicked status:", clickedStatus);
     
       if (clickedStatus) {
         setSelectedStatus(clickedStatus);
         setStatusName(clickedStatus);
+        setTheTask((prevTask) => ({
+          ...prevTask,
+          status: clickedStatus ,// Remplace [name] par 'status' pour cibler directement la clé 'status'
+          statusicon:statusIcon
+        }));
       }
+
     }
+    
+    function iconClick(e){
+      const chosenIcon = e.currentTarget.querySelector('img')?.src;
+      console.log(chosenIcon);
+      
+      setTheTask((prevTask) => ({
+        ...prevTask,
+        icon: chosenIcon 
+
+    }))};
 
     function setChange(e) {
       const { name, value } = e.target;
@@ -103,8 +125,17 @@ export default function ModalCard() {
         color="neutral"
         // startDecorator={<Add />}
         onClick={()=>handleClick(task)}
-        sx={{ backgroundColor:'#A0ECB1', width:'600px' }}
-      >
+        sx={{ 
+          backgroundColor: 
+            task.status === 'In Progress' ? '#F5D565' : 
+            task.status === 'Completed' ? '#A0ECB1' : 
+            task.status === "Won't do" ? '#F7D4D3' : 
+            '#E3E8EF',
+          width: '600px' 
+        }}
+     
+              
+              >
       <CardComponent key={id} task={task} />    
     </Button>
     
@@ -113,10 +144,14 @@ export default function ModalCard() {
     <Button 
                 variant="outlined"
                 color='neutral'
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                      setTheTask({}); // Réinitialisation ici
+                      setOpen(true);
+                  }}
+                
                 sx={{ 
                   display: 'flex', 
-                  height:'62px', 
+                  height:'85px', 
                   flexDirection: 'row', 
                   alignItems: 'center',
                   backgroundColor:'#F5E8D5',
@@ -143,7 +178,7 @@ export default function ModalCard() {
                 </svg>
 
                 </Box>
-                <Typography variant="" x={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Add new task</Typography>
+                <Typography variant="" x={{ fontSize: '1.5rem', fontWeight: 'bold' }}> Add new task</Typography>
 
               </Button>           
 
@@ -186,20 +221,23 @@ export default function ModalCard() {
           </Box>
 
           <form
-                onSubmit={async (e) => {
-                  e.preventDefault(); // Empêche le rafraîchissement de la page
+  onSubmit={async (e) => {
+    e.preventDefault(); // Empêche le rafraîchissement de la page
 
-                  try {
-                    const response = await axios.post('http://localhost:5000/tasks', theTask);
-                    console.log('Tâche soumise avec succès :', response.data);
-                    setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
-                  } catch (error) {
-                    console.error('Erreur lors de la soumission :', error);
-                    setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
+    try {
+      const response = await axios.post('http://localhost:5000/tasks', theTask);
+      console.log('Tâche soumise avec succès :', response.data);
+      setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
 
-                  }
-                }}
-              >
+      // Rafraîchit la liste des tâches après la soumission
+      const updatedTasksResponse = await axios.get("http://localhost:5000/");
+      setTasks(updatedTasksResponse.data); // Met à jour les tâches
+    } catch (error) {
+      console.error('Erreur lors de la soumission :', error);
+      setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
+    }
+  }}
+>
             <Stack spacing={2}>
               <FormControl> 
                 <FormLabel sx={{ color:'GrayText'}}>Task name</FormLabel>
@@ -228,12 +266,12 @@ export default function ModalCard() {
             </Stack>
             <Typography sx={{ color:'GrayText', fontSize:'14px'}}>Icon</Typography>
             <Stack sx={{ flexDirection:'row', gap:'5px' }}>
-              <Button  sx={{ backgroundColor:'#E3E8EF'}}><img width="20" height="20" src="https://img.icons8.com/emoji/48/technologyst.png" alt="technologyst"/></Button>           
-              <Button sx={{ backgroundColor:'#E3E8EF'}}><img width="20" height="20" src="https://img.icons8.com/emoji/48/speech-balloon.png" alt="speech-balloon"/></Button> 
-              <Button sx={{ backgroundColor:'#E3E8EF'}}><img width="20" height="20" src="https://img.icons8.com/emoji/48/hot-beverage.png" alt="hot-beverage"/></Button>
-              <Button sx={{ backgroundColor:'#E3E8EF'}}><img width="20" height="20" src="https://img.icons8.com/emoji/48/person-lifting-weights.png" alt="person-lifting-weights"/></Button>
-              <Button sx={{ backgroundColor:'#E3E8EF'}}><img width="20" height="20" src="https://img.icons8.com/emoji/48/books-emoji.png" alt="books-emoji"/></Button>
-              <Button sx={{ backgroundColor:'#E3E8EF'}}><img width="20" height="20" src="https://img.icons8.com/emoji/48/alarm-clock-emoji.png" alt="alarm-clock-emoji"/></Button>
+              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/technologyst.png" alt="technologyst"/> </Button>           
+              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/speech-balloon.png" alt="speech-balloon"/></Button> 
+              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/hot-beverage.png" alt="hot-beverage"/></Button>
+              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/person-lifting-weights.png" alt="person-lifting-weights"/></Button>
+              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/books-emoji.png" alt="books-emoji"/></Button>
+              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/alarm-clock-emoji.png" alt="alarm-clock-emoji"/></Button>
             </Stack>
 
             <Typography sx={{ color:'GrayText', fontSize:'14px'}}>Status</Typography>
@@ -251,9 +289,8 @@ export default function ModalCard() {
                 color='neutral'
                 variant="outlined"
                 onClick={statusClick}
-                ref={inProgressButtonRef}
                 name ="In Progress"
-                
+
                 sx={{ 
                   display: 'flex', 
                   flexDirection: 'row', 
@@ -277,10 +314,7 @@ export default function ModalCard() {
                     
                   
                     }}>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="10" cy="10" r="7.5" fill="#F8FAFC" fillOpacity="0.25"/>
-                  <path d="M9.99999 4.46669C9.99999 4.32388 9.99999 4.25248 10.0467 4.20813C10.0934 4.16377 10.1622 4.16731 10.2999 4.1744C11.2196 4.22174 12.1166 4.4863 12.9167 4.94821C13.8034 5.46019 14.5398 6.19658 15.0518 7.08335C15.5638 7.97013 15.8333 8.97606 15.8333 10C15.8333 11.024 15.5638 12.0299 15.0518 12.9167C14.5398 13.8035 13.8034 14.5399 12.9167 15.0518C12.0299 15.5638 11.024 15.8334 9.99999 15.8334C8.97603 15.8334 7.9701 15.5638 7.08332 15.0518C6.28329 14.5899 5.60566 13.9454 5.10479 13.1725C5.02983 13.0569 4.99235 12.999 5.00741 12.9364C5.02247 12.8738 5.08431 12.8381 5.20798 12.7667L9.84999 10.0866C9.92319 10.0444 9.9598 10.0232 9.97989 9.98842C9.99999 9.95361 9.99999 9.91135 9.99999 9.82682V4.46669Z" fill="#F8FAFC"/>
-                </svg>
+                    <img width="20" onClick={statusClick} height="20" src="https://img.icons8.com/badges/48/slice.png" alt="slice"/>
                 </Box>
                 <Typography>In Progress</Typography>
                 {selectedStatus && statusName === "In Progress"  || theTask.status === "In Progress"? <Checkbox defaultChecked /> : ""}
@@ -291,7 +325,6 @@ export default function ModalCard() {
                 color='neutral'
                 variant="outlined"
                 name="Completed"
-                ref={completedButtonRef}
                 onClick={statusClick}
                 tabIndex={0}
 
@@ -322,21 +355,17 @@ export default function ModalCard() {
                       alignItems:'center',
                       borderRadius:'5px',
                     
-                      }}>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="10" cy="9.99998" r="6.66667" fill="#F8FAFC" fillOpacity="0.25"/>
-                  <path d="M7.08333 9.16667L8.87623 10.9596C9.26675 11.3501 9.89992 11.3501 10.2904 10.9596L16.25 5" stroke="#F8FAFC" strokeWidth="1.2" strokeLinecap="round"/>
-                </svg>
-                </Box>
-                <Typography>Completed</Typography>
-                {selectedStatus && statusName === "Completed"  || theTask.status  === "Completed"? <Checkbox defaultChecked />: ""}
+                      }}>                  
+                      <img width="20" height="20" src="https://img.icons8.com/doodle/48/ok.png" alt="ok"/>
+                       </Box>
+                    <Typography>Completed </Typography>
+                    {selectedStatus && statusName === "Completed"  || theTask.status  === "Completed"? <Checkbox defaultChecked />: ""}
 
               </Button>           
 
               <Button 
                 color='neutral'
                 variant="outlined"
-                ref={wontDoButtonRef}
                 onClick={statusClick}
                 name = "Won't do"
                 sx={{ 
@@ -361,12 +390,7 @@ export default function ModalCard() {
                     alignItems:'center',
                     borderRadius:'5px',
                   
-                    }}>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="10" cy="10" r="7.5" fill="#E9A23B" fillOpacity="0.25"/>
-                  <path d="M7.5 7.5L12.5 12.5" stroke="#E9A23B" strokeWidth="1.2" strokeLinecap="round"/>
-                  <path d="M12.5 7.5L7.5 12.5" stroke="#E9A23B" strokeWidth="1.2" strokeLinecap="round"/>
-                </svg>
+                    }}><img width="20" height="20" src="https://img.icons8.com/pulsar-gradient/48/cancel.png" alt="cancel"/>
                 </Box>
                 <Typography>Won't do</Typography>
                 {selectedStatus &&statusName === "Won't do" || theTask.status==="Won't do"?<Checkbox defaultChecked />: ""}

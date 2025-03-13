@@ -32,12 +32,12 @@ app.get("/", async (req, res) => {
 });
 //post route
 app.post("/tasks", async (req, res) => {
-  const { id, name, description, status, icon} = req.body;
+  const { id, name, description, status, icon,statusicon} = req.body;
 
-  console.log("Données reçues :", { id, name, description, status, icon });
+  console.log("Données reçues :", { id, name, description, status, icon,statusicon });
 
   // Vérification des champs obligatoires
-  if (!id || !name || !description || !status || !icon) {
+  if (!name || !description ) {
     return res.status(400).json({ error: "Tous les champs sont obligatoires." });
   }
 
@@ -54,10 +54,10 @@ app.post("/tasks", async (req, res) => {
       // Mise à jour de la tâche existante
       const updatedTask = await pool.query(
         `UPDATE tasky 
-         SET name = $1, description = $2, status = $3, icon = $4
+         SET name = $1, description = $2, status = $3, icon = $4,statusicon =$6
          WHERE id = $5
          RETURNING *`,
-        [name, description, status, icon, id]
+        [name, description, status, icon, id,statusicon]
       );
 
       console.log("Tâche mise à jour :", updatedTask.rows[0]);
@@ -65,10 +65,10 @@ app.post("/tasks", async (req, res) => {
     } else {
       // Insertion d'une nouvelle tâche
       const newTask = await pool.query(
-        `INSERT INTO tasky (id, name, description, status, icon) 
-         VALUES ($1, $2, $3, $4, $5) 
+        `INSERT INTO tasky (name, description, status, icon,statusicon) 
+         VALUES ($1, $2, $3, $4,$5) 
          RETURNING *`,
-        [id, name, description, status, icon]
+        [name, description, status, icon,statusicon]
       );
 
       console.log("Nouvelle tâche ajoutée :", newTask.rows[0]);
