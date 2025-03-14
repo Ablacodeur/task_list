@@ -11,8 +11,8 @@ import { Box, Checkbox,Typography } from "@mui/material";
 import CardComponent from "../Card/CardComponent";
 import { Grid, Textarea } from "@mui/joy";
 import axios from 'axios';
-import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
-import { CircularProgress } from "@mui/material";
+import Pagination from '@mui/material/Pagination';
+
 // import { useNavigate } from 'react-router-dom';
 
 
@@ -25,9 +25,19 @@ export default function ModalCard() {
   const [tasks, setTasks]= React.useState([]);
   const [statusName,setStatusName]= React.useState('');
   const [selectedStatus, setSelectedStatus] = React.useState('');
-  // const navigate = useNavigate
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 4;
+
+  // Calculer les tâches à afficher en fonction de la page actuelle
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentTasks = tasks.slice(startIndex, endIndex);
 
 
+    const handlePageChange = (event, value) => {
+      setCurrentPage(value);
+    };
+    
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,7 +151,7 @@ export default function ModalCard() {
 
   return (
     <React.Fragment>
-      {tasks.map((task,id)=>( 
+      {currentTasks.map((task,id)=>( 
       
       <Button
         variant="outlined"
@@ -163,7 +173,6 @@ export default function ModalCard() {
     </Button>
     
     ))}
-
     <Button 
                 variant="outlined"
                 color='neutral'
@@ -206,6 +215,13 @@ export default function ModalCard() {
               </Button>           
 
 
+              <Pagination
+      count={Math.ceil(tasks.length / itemsPerPage)}
+      page={currentPage}
+      onChange={handlePageChange}
+      color="primary"
+      sx={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+    />
 
       <Modal
         open={open}
