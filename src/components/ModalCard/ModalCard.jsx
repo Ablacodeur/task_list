@@ -89,6 +89,29 @@ export default function ModalCard() {
     
       console.log(`Updated ${name}:`, value);
     }
+
+    async function handleDelete(taskId) {
+      if(window.confirm("Do you really want to delete the task?")){
+
+      try {
+        await axios.delete(`http://localhost:5000/tasks/${taskId}`);
+        setTasks((previousTasks) => {
+          // Utilisation de la méthode .filter() pour créer un nouveau tableau
+          const updatedTasks = previousTasks.filter((task) => {
+              // On conserve uniquement les tâches dont l'ID est différent de taskId
+              return task.id !== taskId;
+          });
+      
+          // Mise à jour de l'état avec le nouveau tableau filtré
+          return updatedTasks;
+      });
+        setOpen(false); // Ferme la modale après suppression
+      } catch (error) {
+        console.error("Erreur lors de la suppression de la tâche :", error);
+      }
+    }
+  }
+
         
     // Utilisation de useEffect pour surveiller les changements de selectedStatus
     React.useEffect(() => {
@@ -220,24 +243,24 @@ export default function ModalCard() {
             </Button>
           </Box>
 
-          <form
-  onSubmit={async (e) => {
-    e.preventDefault(); // Empêche le rafraîchissement de la page
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault(); // Empêche le rafraîchissement de la page
 
-    try {
-      const response = await axios.post('http://localhost:5000/tasks', theTask);
-      console.log('Tâche soumise avec succès :', response.data);
-      setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
+                try {
+                  const response = await axios.post('http://localhost:5000/tasks', theTask);
+                  console.log('Tâche soumise avec succès :', response.data);
+                  setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
 
-      // Rafraîchit la liste des tâches après la soumission
-      const updatedTasksResponse = await axios.get("http://localhost:5000/");
-      setTasks(updatedTasksResponse.data); // Met à jour les tâches
-    } catch (error) {
-      console.error('Erreur lors de la soumission :', error);
-      setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
-    }
-  }}
->
+                  // Rafraîchit la liste des tâches après la soumission
+                  const updatedTasksResponse = await axios.get("http://localhost:5000/");
+                  setTasks(updatedTasksResponse.data); // Met à jour les tâches
+                } catch (error) {
+                  console.error('Erreur lors de la soumission :', error);
+                  setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
+                }
+              }}
+            >
             <Stack spacing={2}>
               <FormControl> 
                 <FormLabel sx={{ color:'GrayText'}}>Task name</FormLabel>
@@ -398,7 +421,9 @@ export default function ModalCard() {
 
                 </Grid>
                 <Stack sx={{ flexDirection:'row',  justifyContent:'flex-end', marginTop:'80px', gap:'5px' }}>
-                <Button sx={{ width:"30%",  borderRadius:'50px', backgroundColor:'#97A3B6',gap:'5px' }} type="submit">Delete
+                <Button 
+                onClick={() => handleDelete(theTask.id)}
+                sx={{ width:"30%",  borderRadius:'50px', backgroundColor:'#97A3B6',gap:'5px' }} >Delete
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.33333 12.5L8.33333 10" stroke="#FEF7EE" stroke-width="2" stroke-linecap="round"/>
                 <path d="M11.6667 12.5L11.6667 10" stroke="#FEF7EE" stroke-width="2" stroke-linecap="round"/>

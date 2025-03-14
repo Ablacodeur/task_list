@@ -80,6 +80,18 @@ app.post("/tasks", async (req, res) => {
     }
 });
 
+app.delete('/tasks/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM tasky WHERE id = $1', [id]);
+    res.status(200).json({ message: "Tâche supprimée avec succès" });
+  } catch (error) {
+    console.error("Erreur lors de la suppression :", error);
+    res.status(500).json({ error: "Erreur lors de la suppression de la tâche" });
+  }
+});
+
+
 
 // Lancer le serveur
 const PORT = 5000;
