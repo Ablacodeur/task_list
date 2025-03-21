@@ -12,26 +12,35 @@ import CardComponent from "../Card/CardComponent";
 import { Grid, Textarea } from "@mui/joy";
 import axios from 'axios';
 import Pagination from '@mui/material/Pagination';
-
-// import { useNavigate } from 'react-router-dom';
-
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteTask, settaskList} from '../../store/task/task-slice';
 
 
 export default function ModalCard() {
   const [open, setOpen] = React.useState(false);
   const [theTask, setTheTask]= React.useState({});
-  const [tasks, setTasks]= React.useState([]);
   const [statusName,setStatusName]= React.useState('');
   const [selectedStatus, setSelectedStatus] = React.useState('');
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 4;
 
+  const dispatch = useDispatch();
+
+  const taskList = useSelector((store)=>store.TASK.taskList);
+  const userSearch  = useSelector((store)=>store.SEARCH.theSearch);
+
+  const filteredList = taskList.filter((task)=>{
+    const containsTitle =task.name.toUpperCase().includes(userSearch.trim().toUpperCase());
+    const containsContent =task.description.toUpperCase().includes(userSearch.trim().toUpperCase());
+
+    return containsTitle || containsContent;
+})
+
+
   // Calculer les tâches à afficher en fonction de la page actuelle
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentTasks = tasks.slice(startIndex, endIndex);
+    const currentTasks = filteredList.slice(startIndex, endIndex);
 
 
     const handlePageChange = (event, value) => {
@@ -40,18 +49,18 @@ export default function ModalCard() {
     
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/");
-        setTasks(response.data); // Réponse contient les données dans `data`
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchData();
-  }, []);
+      const fetchData = async () => {
+          try {
+              const response = await axios.get("http://localhost:5000/");
+              dispatch(settaskList(response.data));
+          } catch (err) {
+              console.error(err);
+          }
+      };
   
+      fetchData();
+  }, [taskList]); 
+    
     function handleClick(task){
     setOpen(true);
     if(task){
@@ -70,57 +79,42 @@ export default function ModalCard() {
       if (clickedStatus) {
         setSelectedStatus(clickedStatus);
         setStatusName(clickedStatus);
-        setTheTask((prevTask) => ({
-          ...prevTask,
-          status: clickedStatus ,// Remplace [name] par 'status' pour cibler directement la clé 'status'
-          statusicon:statusIcon
-        }));
-      }
+        dispatch(setTheTask({...theTask,status:clickedStatus,statusicon: statusIcon}))
 
     }
-    
+  };
     function iconClick(e){
       const chosenIcon = e.currentTarget.querySelector('img')?.src;
       console.log(chosenIcon);
       
-      setTheTask((prevTask) => ({
-        ...prevTask,
-        icon: chosenIcon 
+    dispatch(setTheTask({...theTask,icon: chosenIcon }))
 
-    }))};
+  };
 
-    function setChange(e) {
-      const { name, value } = e.target;
+  function setChange(e) {
+    const { name, value } = e.target;
+
+    dispatch(setTheTask({
+        ...theTask,  // Récupère les valeurs précédentes
+        [name]: value // Met à jour uniquement le champ modifié
+    }));
     
-      setTheTask((prevTask) => ({
-        ...prevTask,
-        [name]: value, // Met à jour dynamiquement la clé correspondante
-      }));
-    
-      console.log(`Updated ${name}:`, value);
-    }
+    console.log(`Updated ${name}:`, value);
+}
 
     async function handleDelete(taskId) {
-      if(window.confirm("Do you really want to delete the task?")){
+      if (window.confirm("Do you really want to delete the task?")) {
+          try {
+              await axios.delete(`http://localhost:5000/tasks/${taskId}`);
+              
+              dispatch(deleteTask(taskId)); // Utilise l'ID au lieu de recréer une liste
 
-      try {
-        await axios.delete(`http://localhost:5000/tasks/${taskId}`);
-        setTasks((previousTasks) => {
-          // Utilisation de la méthode .filter() pour créer un nouveau tableau
-          const updatedTasks = previousTasks.filter((task) => {
-              // On conserve uniquement les tâches dont l'ID est différent de taskId
-              return task.id !== taskId;
-          });
-      
-          // Mise à jour de l'état avec le nouveau tableau filtré
-          return updatedTasks;
-      });
-        setOpen(false); // Ferme la modale après suppression
-      } catch (error) {
-        console.error("Erreur lors de la suppression de la tâche :", error);
+              setOpen(false);
+          } catch (error) {
+              console.error("Erreur lors de la suppression de la tâche :", error);
+          }
       }
     }
-  }
 
         
     // Utilisation de useEffect pour surveiller les changements de selectedStatus
@@ -177,9 +171,11 @@ export default function ModalCard() {
                 variant="outlined"
                 color='neutral'
                 onClick={() => {
-                      setTheTask({}); // Réinitialisation ici
-                      setOpen(true);
-                  }}
+                setTheTask({ name: '', description: '', status: '', icon: '' }); 
+                setSelectedStatus('');
+                setStatusName('');
+                setOpen(true);
+              }}
                 
                 sx={{ 
                   display: 'flex', 
@@ -216,7 +212,7 @@ export default function ModalCard() {
 
 
               <Pagination
-      count={Math.ceil(tasks.length / itemsPerPage)}
+      count={Math.ceil(filteredList.length / itemsPerPage)}
       page={currentPage}
       onChange={handlePageChange}
       color="primary"
@@ -262,20 +258,17 @@ export default function ModalCard() {
             <form
               onSubmit={async (e) => {
                 e.preventDefault(); // Empêche le rafraîchissement de la page
-
                 try {
-                  const response = await axios.post('http://localhost:5000/tasks', theTask);
-                  console.log('Tâche soumise avec succès :', response.data);
-                  setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
-
-                  // Rafraîchit la liste des tâches après la soumission
-                  const updatedTasksResponse = await axios.get("http://localhost:5000/");
-                  setTasks(updatedTasksResponse.data); // Met à jour les tâches
-                } catch (error) {
-                  console.error('Erreur lors de la soumission :', error);
-                  setOpen(false); // Ferme la modale ou le formulaire après la réussite de la requête
-                }
-              }}
+                    const response = await axios.post('http://localhost:5000/tasks', theTask);
+                    console.log('Tâche soumise avec succès :', response.data);
+                    
+                    dispatch(settaskList([...taskList, response.data])); // Mise à jour immédiate du store
+                    
+                    setOpen(false); 
+                  } catch (error) {
+                    console.error('Erreur lors de la soumission :', error);
+                  }
+                }}
             >
             <Stack spacing={2}>
               <FormControl> 

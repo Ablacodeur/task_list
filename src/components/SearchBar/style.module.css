@@ -1,0 +1,18 @@
+
+.input{
+    
+    border-radius: 30px;
+    height: 50px;
+    padding-left: 17px;
+    width: 185px;
+    border: 1px;
+    background-color: transparent;
+    border-color: #394150;
+    color: #060607;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.65);
+}
+
+input:focus{
+    outline: none;
+    border: 3px solid #FEBD2E;
+}
