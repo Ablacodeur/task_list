@@ -1,21 +1,24 @@
-import React from 'react'
-import s from "./style.module.css"
-import { Label } from '@mui/icons-material';
+import { useDispatch } from "react-redux";
+import s from "./style.module.css";
+import { settheStatus } from "../../store/task/userSearch-slice";
 
-export default function SearchByStatus({handleSelectChange}) {
-    const AllStatus =["Completed",  "In Progress","Won't do"];
+export default function SearchByStatus() {
+  const status =["Completed",  "In Progress","Won't do"];
 
-    return (
+  const  dispatch = useDispatch();
+
+  function onSelectArea(event){
+    dispatch(settheStatus(event.target.value))
+  }
+  return (
     <div>
-        
-      <select className={s.input} onClick={''} onChange={handleSelectChange}>
-      <Label>Task's name</Label>
-        <option value="">Sort by: Task's name</option>
-        {AllStatus.map((theStatus,index)=>{
+      <select className={s.input} onClick={''} onChange={onSelectArea}>
+        <option value="">Sort by: Status</option>
+        {status.map((theStatus,index)=>{
           return(
             <option value={theStatus} key={index}>{theStatus}</option>          )
         })}
       </select>
-    </div>
+  </div>
   )
 }

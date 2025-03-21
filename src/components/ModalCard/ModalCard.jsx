@@ -28,13 +28,19 @@ export default function ModalCard() {
 
   const taskList = useSelector((store)=>store.TASK.taskList);
   const userSearch  = useSelector((store)=>store.SEARCH.theSearch);
+  const searchByStatus = useSelector((store)=>store.SEARCH.theStatus);
 
-  const filteredList = taskList.filter((task)=>{
-    const containsTitle =task.name.toUpperCase().includes(userSearch.trim().toUpperCase());
-    const containsContent =task.description.toUpperCase().includes(userSearch.trim().toUpperCase());
+  
+  const filteredList = taskList.filter((task) => {
+    const containsTitle = task.name.toUpperCase().includes(userSearch.trim().toUpperCase());
+    const containsContent = task.description.toUpperCase().includes(userSearch.trim().toUpperCase());
 
-    return containsTitle || containsContent;
-})
+    const matchesSearch = containsTitle || containsContent;
+
+    const matchesStatus = searchByStatus.trim() === '' || task.status.toUpperCase() === searchByStatus.trim().toUpperCase();
+
+    return matchesSearch && matchesStatus;
+});
 
 
   // Calculer les tâches à afficher en fonction de la page actuelle

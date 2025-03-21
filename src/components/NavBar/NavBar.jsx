@@ -12,6 +12,8 @@ export default function NavBar() {
 
   function handleChange(e){
     setSearchText(e.target.value)
+    console.log(e.target.value);
+    
     dispatch(settheSearch(e.target.value))
   };
   console.log(searchText);
@@ -25,7 +27,7 @@ export default function NavBar() {
             gap:'10px'
          }}>
          <SearchBar onTextChange={handleChange}/>
-        <SearchByStatus />
+        <SearchByStatus onTextChange={handleChange} />
         </Stack>
     </Box>
 
