@@ -24,12 +24,27 @@ const pool = new Pool({
 app.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM tasky");
+
     res.json(result.rows);    
+    
   } catch (error) {
     console.error(error);
     res.status(500).send("Erreur serveur");
   }
 });
+// app.get("/page-title", async (req, res) => {
+//   try {
+//     const respond = await pool.query("SELECT * FROM page_title");
+
+//     res.json(respond.rows);    
+//     console.log(respond);
+    
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Erreur serveur");
+//   }
+// });
+
 //post route
 app.post("/tasks", async (req, res) => {
   const { id, name, description, status, icon,statusicon} = req.body;
