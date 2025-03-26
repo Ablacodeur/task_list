@@ -19,3 +19,71 @@ select:focus{
 option:hover{
     background-color: #FEBD2E !important;
 }
+.resetText {
+    cursor: pointer;
+    background-color: #FEBD2E;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.resetText:hover {
+    background-color: #e0a81e; 
+}
+
+/* Select affiché uniquement sur grand écran */
+.selectContainer {
+    display: block;
+  }
+  
+  .select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+  }
+  
+  /* Masquer le dropdown sur les grands écrans */
+  .searchStatus {
+    display: none;
+  }
+  
+  /* Afficher le dropdown uniquement sur petits écrans */
+  @media (max-width: 600px) {
+    .selectContainer {
+      display: none;
+    }
+  
+    .searchStatus {
+      display: block;
+    }
+  
+    .menuButton {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+  
+    .dropdownMenu {
+      border: 1px solid #ccc;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      margin-top: 5px;
+    }
+  
+    .menuItem {
+      padding: 10px;
+      cursor: pointer;
+    }
+  
+    .menuItem:hover {
+      background-color: #f0f0f0;
+    }
+  }
+  
