@@ -6,20 +6,22 @@ import arrow from "./components/resources/arrow.png"
 function App() {
 
   return (
-    <>
+    <Box sx={{ 
+        height:'100vh'
+     }}>
     <NavBar/>
     <Box sx={{ 
-        display:'flex',
+        display: { xs: 'none', sm: 'flex' },       
         justifyContent:'end',
-        zIndex: -1,
+        zIndex: -1, 
         padding:'20px',
         marginRight:'25px'
 
      }}>
-    <img src={arrow} ></img>
+    <img src={arrow} alt="arrow" ></img>
     </Box>
     <Browser />
-    </>
+    </Box>
   )
 }
 

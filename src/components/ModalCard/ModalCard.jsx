@@ -151,6 +151,14 @@ export default function ModalCard() {
 
   return (
     <React.Fragment>
+    <Box  sx={{ 
+      display:'flex',
+      flexDirection:'column',
+      justifyContent:'center',
+      alignItems:'center',
+      gap:' 15px'
+
+      }}>
       {currentTasks.map((task,id)=>( 
       
       <Button
@@ -164,7 +172,7 @@ export default function ModalCard() {
             task.status === 'Completed' ? '#A0ECB1' : 
             task.status === "Won't do" ? '#F7D4D3' : 
             '#E3E8EF',
-          width: '600px' 
+            width: { xs: '100%', sm: '600px', md: '600px', lg: '600px' }        
         }}
      
               
@@ -186,6 +194,7 @@ export default function ModalCard() {
                 sx={{ 
                   display: 'flex', 
                   height:'85px', 
+                  width: { xs: '100%', sm: '600px', md: '600px', lg: '600px' }  ,      
                   flexDirection: 'row', 
                   alignItems: 'center',
                   backgroundColor:'#F5E8D5',
@@ -215,9 +224,9 @@ export default function ModalCard() {
                 <Typography variant="" x={{ fontSize: '1.5rem', fontWeight: 'bold' }}> Add new task</Typography>
 
               </Button>           
+          </Box>
 
-
-              <Pagination
+    <Pagination
       count={Math.ceil(filteredList.length / itemsPerPage)}
       page={currentPage}
       onChange={handlePageChange}
@@ -236,14 +245,30 @@ export default function ModalCard() {
       >
         <ModalDialog
           sx={{
-            backgroundColor: "white", // Fond du modal
+            backgroundColor: "white", 
             borderRadius: "8px",
             padding: "16px",
             boxShadow: "lg",
-            overflow: "auto", // Évite les bugs de style
-            width:'600px',
-            marginLeft:'27.5%',
-          }}
+            overflow: "auto", 
+            width: {
+            xs: '90%',   
+            sm: '70%',   
+            md: '50%',   
+            lg: '40%'   
+        },
+        marginLeft: {
+            xs: 0,       
+            sm: '15%',   
+            lg: '27.5%' 
+        }  ,
+        marginTop: {
+            xs: '10%',   
+            sm: '8%',    
+            md: '5%',    
+            lg: '2%'     
+        }        
+        
+        }}
         >
         {/* En-tête avec "Task details" et bouton "Close" */}
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -303,27 +328,44 @@ export default function ModalCard() {
 
             </Stack>
             <Typography sx={{ color:'GrayText', fontSize:'14px'}}>Icon</Typography>
-            <Stack sx={{ flexDirection:'row', gap:'5px' }}>
-              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/technologyst.png" alt="technologyst"/> </Button>           
-              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/speech-balloon.png" alt="speech-balloon"/></Button> 
-              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/hot-beverage.png" alt="hot-beverage"/></Button>
-              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/person-lifting-weights.png" alt="person-lifting-weights"/></Button>
-              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/books-emoji.png" alt="books-emoji"/></Button>
-              <Button onClick={iconClick} sx={{ backgroundColor:'#E3E8EF'}}><img  width="20" height="20" src="https://img.icons8.com/emoji/48/alarm-clock-emoji.png" alt="alarm-clock-emoji"/></Button>
-            </Stack>
+            <Stack sx={{ flexDirection: 'row', gap: '5px' }}>
+              {[
+                  "https://img.icons8.com/emoji/48/technologyst.png",
+                  "https://img.icons8.com/emoji/48/speech-balloon.png",
+                  "https://img.icons8.com/emoji/48/hot-beverage.png",
+                  "https://img.icons8.com/emoji/48/person-lifting-weights.png",
+                  "https://img.icons8.com/emoji/48/books-emoji.png",
+                  "https://img.icons8.com/emoji/48/alarm-clock-emoji.png"
+              ].map((icon, index) => (
+                  <Button 
+                      key={index} 
+                      onClick={iconClick} 
+                      sx={{ 
+                          backgroundColor: '#E3E8EF', 
+                          width: { xs: '30px', sm: '40px', md: '50px' } 
+                      }}
+                  >
+                      <img  
+                          src={icon} 
+                          alt={`icon-${index}`} 
+                          width="20" 
+                          height="20"
+                      />
+                  </Button>
+              ))}
+          </Stack>
 
             <Typography sx={{ color:'GrayText', fontSize:'14px'}}>Status</Typography>
             <Grid 
-              container
-              sx={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(2, 1fr)', // Trois colonnes de taille égale
-                gap: '5px',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <Button 
+    container
+    sx={{ 
+        display: 'grid', 
+        gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, 
+        gap: '5px',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }}
+>              <Button 
                 color='neutral'
                 variant="outlined"
                 onClick={statusClick}
@@ -354,8 +396,20 @@ export default function ModalCard() {
                     }}>
                     <img width="20" onClick={statusClick} height="20" src="https://img.icons8.com/badges/48/slice.png" alt="slice"/>
                 </Box>
-                <Typography>In Progress</Typography>
-                {selectedStatus && statusName === "In Progress"  || theTask.status === "In Progress"? <Checkbox defaultChecked /> : ""}
+                <Typography
+                  sx={{
+                      fontSize: {
+                          xs: '14px',
+                          sm: '16px', 
+                          md: '18px',  
+                          lg: '20px'  
+                      },
+                      fontWeight: 'bold'  
+                  }}
+              >
+                  In Progress
+              </Typography>                
+            {selectedStatus && statusName === "In Progress"  || theTask.status === "In Progress"? <Checkbox defaultChecked /> : ""}
 
               </Button>           
 
@@ -396,7 +450,19 @@ export default function ModalCard() {
                       }}>                  
                       <img width="20" height="20" src="https://img.icons8.com/doodle/48/ok.png" alt="ok"/>
                        </Box>
-                    <Typography>Completed </Typography>
+                       <Typography
+                        sx={{
+                            fontSize: {
+                                xs: '14px',
+                                sm: '16px', 
+                                md: '18px',  
+                                lg: '20px'  
+                            },
+                            fontWeight: 'bold'  
+                        }}
+                      >
+                    Completed 
+                    </Typography>
                     {selectedStatus && statusName === "Completed"  || theTask.status  === "Completed"? <Checkbox defaultChecked />: ""}
 
               </Button>           
@@ -430,7 +496,19 @@ export default function ModalCard() {
                   
                     }}><img width="20" height="20" src="https://img.icons8.com/pulsar-gradient/48/cancel.png" alt="cancel"/>
                 </Box>
-                <Typography>Won't do</Typography>
+                <Typography
+                  sx={{
+                      fontSize: {
+                          xs: '14px',
+                          sm: '16px', 
+                          md: '18px',  
+                          lg: '20px'  
+                      },
+                      fontWeight: 'bold'  
+                  }}
+              >
+                Won't do
+                </Typography>
                 {selectedStatus &&statusName === "Won't do" || theTask.status==="Won't do"?<Checkbox defaultChecked />: ""}
               </Button> 
 
