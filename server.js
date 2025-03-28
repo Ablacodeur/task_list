@@ -1,11 +1,9 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import cors from "cors";
 import pkg from "pg";  // Importation par défaut de 'pg'
 const { Pool } = pkg;  // Extraction de 'Pool' de l'objet importé
-
-// Charger les variables d'environnement
-import dotenv from "dotenv"; 
-dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -13,13 +11,13 @@ app.use(express.json()); // Permet de traiter le JSON des requêtes
 
 // Connexion à PostgreSQL
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'task',
-  password:'victo',
-  port: '5432',
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
-
 // Route pour récupérer les tâches
 app.get("/", async (req, res) => {
   try {
