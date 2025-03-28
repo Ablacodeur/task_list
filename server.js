@@ -10,14 +10,12 @@ app.use(cors());
 app.use(express.json()); // Permet de traiter le JSON des requêtes
 
 // Connexion à PostgreSQL
+
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT,
+  connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
+
 // Route pour récupérer les tâches
 app.get("/", async (req, res) => {
   try {
