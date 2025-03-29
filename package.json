@@ -3,13 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-
-  },
+"scripts": {
+  "dev": "vite",  // Pour ton développement local uniquement
+  "build": "vite build --max-memory=4096",  // Commande pour la production
+  "start": "node dist/server.js",  // Démarrer ton serveur en production
+  "lint": "eslint .",
+  "preview": "vite preview"
+},
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
