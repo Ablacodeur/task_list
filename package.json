@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
 "scripts": {
-  "dev": "vite",  // Pour ton développement local uniquement
-  "build": "vite build --max-memory=4096",  // Commande pour la production
-  "start": "node dist/server.js",  // Démarrer ton serveur en production
+  "dev": "vite", 
+  "build": "vite build --max-memory=4096",  
+  "start": "node dist/server.js",  
   "lint": "eslint .",
   "preview": "vite preview"
 },
