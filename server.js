@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Permet de traiter le JSON des requêtes
 
-c// Route pour récupérer les tâches
+// Route pour récupérer les tâches
 app.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM tasky");
