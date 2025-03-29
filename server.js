@@ -9,14 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Permet de traiter le JSON des requêtes
 
-// Connexion à PostgreSQL
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
-
-// Route pour récupérer les tâches
+c// Route pour récupérer les tâches
 app.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM tasky");
