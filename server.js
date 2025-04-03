@@ -9,30 +9,15 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Permet de traiter le JSON des requêtes
 
-import { Client } from 'pg';
-
-// Créer une nouvelle instance du client
-const client = new Client({
-  host: 'postgres.railway.internal',
-  port: 5432,
-  user: 'postgres',
-  password: 'kBJvAuJmbvEhgzUAmJVSCqRCJtxtogNT',
-  database: 'railway',  // Utilise le bon nom de ta base de données
+// Connexion à PostgreSQL
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
-
-// Connecter le client
-client.connect()
-  .then(() => {
-    console.log('Connexion à la base de données réussie!');
-  })
-  .catch((err) => {
-    console.error('Erreur de connexion à la base de données:', err);
-  })
-  .finally(() => {
-    client.end();
-  });
-
-
 // Route pour récupérer les tâches
 app.get("/", async (req, res) => {
   try {
