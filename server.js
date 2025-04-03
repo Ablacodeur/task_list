@@ -107,7 +107,7 @@ app.delete('/tasks/:id', async (req, res) => {
 
 
 // Lancer le serveur
-const PORT = process.env.PORT 
+const PORT = process.env.DB_PORT 
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur http://localhost:${PORT}`);
 });
