@@ -6,6 +6,9 @@ import pkg from "pg";
 const { Pool } = pkg; 
 
 const app = express();
+// for bbackend url 
+const backendURL = import.meta.env.VITE_API_URL;
+
 
 // Configuration CORS : permet d'autoriser le frontend de Vercel à se connecter
 const corsOptions = {
@@ -27,7 +30,7 @@ const pool = new Pool({
 });
 
 // Route pour récupérer toutes les tâches
-app.get("/tasks", async (req, res) => {
+app.get(`${backendURL}/tasks`, async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM tasky");
     res.json(result.rows);    
@@ -38,7 +41,7 @@ app.get("/tasks", async (req, res) => {
 });
 
 // Route pour ajouter ou mettre à jour une tâche
-app.post("/tasks", async (req, res) => {
+app.post(`${backendURL}/tasks`, async (req, res) => {
   const { id, name, description, status, icon, statusicon } = req.body;
 
   console.log("Données reçues :", { id, name, description, status, icon, statusicon });
@@ -79,7 +82,7 @@ app.post("/tasks", async (req, res) => {
 });
 
 // Route pour supprimer une tâche
-app.delete('/tasks/:id', async (req, res) => {
+app.delete(`${backendURL}/tasks/:id`, async (req, res) => {
   const { id } = req.params;
   try {
     const deleteResult = await pool.query('DELETE FROM tasky WHERE id = $1', [id]);
@@ -98,3 +101,4 @@ const PORT = process.env.PORT || 5000;  // Assure-toi que le port est bien défi
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur http://localhost:${PORT}`);
 });
+
