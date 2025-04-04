@@ -7,16 +7,15 @@ const { Pool } = pkg;
 
 const app = express();
 
-// Configuration CORS : permet d'autoriser le frontend de Vercel à se connecter
+// CORS : autoriser le frontend déployé sur Vercel à accéder à l'API
 const corsOptions = {
-  origin: 'https://task-list-inky.vercel.app/', 
+  origin: 'https://task-list-inky.vercel.app',  // sans slash à la fin !
   methods: 'GET,POST,DELETE',
 };
 app.use(cors(corsOptions));
+app.use(express.json());
 
-app.use(express.json()); // Permet de traiter le JSON des requêtes
-
-// Connexion à PostgreSQL
+// Connexion PostgreSQL
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -26,7 +25,8 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// Route pour récupérer toutes les tâches
+// ✅ Routes
+
 app.get("/tasks", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM tasky");
@@ -37,23 +37,17 @@ app.get("/tasks", async (req, res) => {
   }
 });
 
-// Route pour ajouter ou mettre à jour une tâche
 app.post("/tasks", async (req, res) => {
   const { id, name, description, status, icon, statusicon } = req.body;
 
-  console.log("Données reçues :", { id, name, description, status, icon, statusicon });
-
-  // Vérification des champs obligatoires
   if (!name || !description) {
     return res.status(400).json({ error: "Tous les champs sont obligatoires." });
   }
 
   try {
-    // Vérifie si la tâche existe déjà
     const existingTask = await pool.query("SELECT * FROM tasky WHERE id = $1", [id]);
 
     if (existingTask.rows.length > 0) {
-      // Mise à jour de la tâche existante
       const updatedTask = await pool.query(
         `UPDATE tasky 
          SET name = $1, description = $2, status = $3, icon = $4, statusicon = $5
@@ -63,7 +57,6 @@ app.post("/tasks", async (req, res) => {
       );
       return res.status(200).json(updatedTask.rows[0]);
     } else {
-      // Insertion d'une nouvelle tâche
       const newTask = await pool.query(
         `INSERT INTO tasky (name, description, status, icon, statusicon) 
          VALUES ($1, $2, $3, $4, $5) 
@@ -78,8 +71,7 @@ app.post("/tasks", async (req, res) => {
   }
 });
 
-// Route pour supprimer une tâche
-app.delete('/tasks/:id', async (req, res) => {
+app.delete("/tasks/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const deleteResult = await pool.query('DELETE FROM tasky WHERE id = $1', [id]);
@@ -94,7 +86,7 @@ app.delete('/tasks/:id', async (req, res) => {
 });
 
 // Lancer le serveur
-const PORT = process.env.PORT || 5000;  // Assure-toi que le port est bien défini dans les variables d'environnement
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Serveur lancé sur http://localhost:${PORT}`);
+  console.log(`Serveur lancé sur le port ${PORT}`);
 });

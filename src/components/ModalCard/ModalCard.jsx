@@ -23,6 +23,7 @@ export default function ModalCard() {
   const [selectedStatus, setSelectedStatus] = React.useState('');
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 4;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const dispatch = useDispatch();
 
@@ -57,7 +58,7 @@ export default function ModalCard() {
   useEffect(() => {
       const fetchData = async () => {
           try {
-              const response = await axios.get("http://localhost:5000/");
+              const response = await axios.get(`${API_URL}/`);
               dispatch(settaskList(response.data));
           } catch (err) {
               console.error(err);
@@ -111,7 +112,7 @@ export default function ModalCard() {
     async function handleDelete(taskId) {
       if (window.confirm("Do you really want to delete the task?")) {
           try {
-              await axios.delete(`http://localhost:5000/tasks/${taskId}`);
+              await axios.delete(`${API_URL}/tasks/${taskId}`);
               
               dispatch(deleteTask(taskId)); // Utilise l'ID au lieu de recréer une liste
 
@@ -290,7 +291,7 @@ export default function ModalCard() {
               onSubmit={async (e) => {
                 e.preventDefault(); // Empêche le rafraîchissement de la page
                 try {
-                    const response = await axios.post('http://localhost:5000/tasks', theTask);
+                    const response = await axios.post(`${API_URL}/tasks`, theTask);
                     console.log('Tâche soumise avec succès :', response.data);
                     
                     dispatch(settaskList([...taskList, response.data])); // Mise à jour immédiate du store
