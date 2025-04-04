@@ -3,13 +3,14 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import pkg from "pg"; 
+import { log } from "console";
 const { Pool } = pkg; 
 
 const app = express();
 
 // CORS : autoriser le frontend déployé sur Vercel à accéder à l'API
 const corsOptions = {
-  origin: 'https://task-list-inky.vercel.app',  // sans slash à la fin !
+  origin: 'https://task-list-inky.vercel.app',  
   methods: 'GET,POST,DELETE',
 };
 app.use(cors(corsOptions));
@@ -26,6 +27,12 @@ const pool = new Pool({
 });
 
 // ✅ Routes
+app.get("/", (req, res) => {
+  res.send("Backend opérationnel 🚀");
+  console.log("Backend opérationnel 🚀");
+  
+});
+
 
 app.get("/tasks", async (req, res) => {
   try {
