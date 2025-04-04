@@ -8,7 +8,7 @@ const { Pool } = pkg;  // Extraction de 'Pool' de l'objet importé
 const app = express();
 app.use(cors());
 app.use(express.json()); // Permet de traiter le JSON des requêtes
-
+// try
 // Connexion à PostgreSQL
 const pool = new Pool({
   user: process.env.DB_USER,
