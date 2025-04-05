@@ -478,7 +478,7 @@ export default function ModalCard() {
                 alignItems: 'center',
                 justifyContent: 'flex-start',
                 padding: '2px 2px', 
-                gap: '8px', // Espacement entre Box et le texte
+                gap: '8px',
                 outline: statusName  === "Won't do" || theTask.status==="Won't do" ? '3px solid blue' : 'none', 
                   '&:focus': {
                     outline: '3px solid blue', }
