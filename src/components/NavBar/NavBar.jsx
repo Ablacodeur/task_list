@@ -21,6 +21,7 @@ export default function NavBar() {
       <Stack
         sx={{
           flexDirection: { xs: 'column-reverse row', sm: 'row' },
+          //sm
           justifyContent: { xs: 'space-between', sm: 'end' },
           alignItems: { xs: 'flex-start', sm: 'center' }, 
           gap: '30px',
