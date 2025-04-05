@@ -20,17 +20,17 @@ export default function NavBar() {
     <Box>
       <Stack
         sx={{
-          flexDirection: { xs: 'column-reverse row', sm: 'row' },
+          flexDirection: { xs: 'row', sm: 'row' },
           //sm
           justifyContent: { xs: 'space-between', sm: 'end' },
           alignItems: { xs: 'flex-start', sm: 'center' }, 
           gap: '30px',
         }}
       >
-      <Box sx={{ zIndex:'3', width: { xs: '100%', sm: 'auto',display:'flex',justifyContent:'center' } }}>
+      <Box sx={{ zIndex:'3', width: { xs: '100%', sm: 'auto' } }}>
         <SearchBar onTextChange={handleChange} />
       </Box>
-        <Box sx={{ zIndex:'3', width: { xs: '100%', sm: 'auto',display:'flex',justifyContent:'end' } }}> 
+        <Box sx={{ zIndex:'3', width: { xs: '100%', sm: 'auto' } }}> 
           <SearchByStatus onTextChange={handleChange} />
         </Box>
       </Stack>
