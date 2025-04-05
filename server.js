@@ -26,7 +26,7 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// ✅ Routes
+// ✅ Routes for the /
 app.get("/", (req, res) => {
   res.send("Backend opérationnel 🚀");
   console.log("Backend opérationnel 🚀");
