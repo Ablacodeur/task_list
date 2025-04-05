@@ -26,9 +26,9 @@ export default function NavBar() {
           gap: '30px',
         }}
       >
-        <Box sx={{ zIndex:'3', width: { xs: '100%', sm: 'auto',display:'flex',justifyContent:'center' } }}>
-          <SearchBar onTextChange={handleChange} />
-        </Box>
+      <Box sx={{ zIndex:'3', width: { xs: '100%', sm: 'auto',display:'flex',justifyContent:'center' } }}>
+        <SearchBar onTextChange={handleChange} />
+      </Box>
         <Box sx={{ zIndex:'3', width: { xs: '100%', sm: 'auto',display:'flex',justifyContent:'end' } }}> 
           <SearchByStatus onTextChange={handleChange} />
         </Box>
