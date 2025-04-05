@@ -27,7 +27,7 @@ export default function NavBar() {
           marginBottom:{xs:'50px'}
         }}
       >
-      <Box sx={{ zIndex:'3', width: { xs: '70%', sm: 'auto' } }}>
+      <Box sx={{ zIndex:'3', width: { xs: '90%', sm: 'auto' } }}>
         <SearchBar onTextChange={handleChange} />
       </Box>
         <Box sx={{ zIndex:'3' }}> 
