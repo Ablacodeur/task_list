@@ -23,14 +23,14 @@ export default function NavBar() {
           flexDirection: { xs: 'row', sm: 'row' },
           //sm
           justifyContent: { xs: 'space-between', sm: 'end' },
-          alignItems: { xs: 'flex-start', sm: 'center' }, 
+          // alignItems: { xs: 'flex-start', sm: 'center' }, 
           gap: '30px',
         }}
       >
-      <Box sx={{ zIndex:'3', width: { xs: '100%', sm: 'auto' } }}>
+      <Box sx={{ zIndex:'3' }}>
         <SearchBar onTextChange={handleChange} />
       </Box>
-        <Box sx={{ zIndex:'3', width: { xs: '100%', sm: 'auto' } }}> 
+        <Box sx={{ zIndex:'3' }}> 
           <SearchByStatus onTextChange={handleChange} />
         </Box>
       </Stack>
