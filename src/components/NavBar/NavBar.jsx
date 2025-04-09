@@ -24,7 +24,7 @@ export default function NavBar() {
           //sm
           justifyContent: { xs: 'space-between', sm: 'end' },
           gap: '30px',
-          marginBottom:{xs:'50px'}
+          marginBottom:{xs:'30px'}
         }}
       >
       <Box sx={{ zIndex:'1', width: { xs: '90%', sm: 'auto' } }}>

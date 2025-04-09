@@ -172,7 +172,9 @@ export default function ModalCard() {
             task.status === 'Completed' ? '#A0ECB1' : 
             task.status === "Won't do" ? '#F7D4D3' : 
             '#E3E8EF',
-            width: { xs: '100%', sm: '600px', md: '600px', lg: '600px' }        
+            width: { xs: '300px', sm: '600px', md: '600px', lg: '600px' }  ,      
+            height: { xs: '15%' }        
+
         }}
      
               
@@ -193,7 +195,7 @@ export default function ModalCard() {
                 
                 sx={{ 
                   display: 'flex', 
-                  height:'85px', 
+                  height:{xs:'35',md:'85px'}, 
                   width: { xs: '100%', sm: '600px', md: '600px', lg: '600px' }  ,      
                   flexDirection: 'row', 
                   alignItems: 'center',

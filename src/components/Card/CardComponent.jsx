@@ -8,7 +8,7 @@ export default function CardComponent({ task }) {
       variant="none"
       sx={{
         width: '100%',
-        height: '65px',
+        height: {xs:'35px', md:'65px'},
         borderRadius: '10px',
         backgroundColor: 
             task.status === 'In Progress' ? '#F5D565' : 
@@ -41,13 +41,35 @@ export default function CardComponent({ task }) {
 
       {/* 📌 CONTENU TEXTE */}
       <Stack sx={{ textAlign: 'start', flex: 1, marginLeft: '8px' }}>
-        <CardContent sx={{ padding: '0px' }}>
-          <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+        <CardContent sx={{ padding: '20px' }}>
+          <Typography 
+          variant="h6" 
+          sx={{ fontSize: '1rem', 
+          fontWeight: 'bold',
+            overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical'
+           }}
+          
+          >
             {task.name}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical'
+            }}
+          >
             {task.description}
           </Typography>
+
         </CardContent>
       </Stack>
 
