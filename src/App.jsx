@@ -7,7 +7,7 @@ function App() {
 
   return (
     <Box sx={{ 
-        height:'100vh'
+        height:{xs:'40vh',md:'90vh'}
      }}>
     <NavBar/>
     <Box sx={{ 

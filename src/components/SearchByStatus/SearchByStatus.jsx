@@ -3,7 +3,7 @@ import { settheStatus } from "../../store/task/userSearch-slice";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
 import s from "./style.module.css"; // Import du CSS en module
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Button } from "@mui/base";
 
 export default function SearchByStatus() {
@@ -26,7 +26,7 @@ export default function SearchByStatus() {
       {/* Select pour les grands écrans */}
       <div className={`${s.selectContainer}`}>
         <select className={s.input} onChange={onSelectArea}>
-          <option value="">Sort by: Status</option>
+          <option value="" >Sort by: Status</option>
           {status.map((theStatus, index) => (
             <option value={theStatus} key={index}>
               {theStatus}
@@ -46,20 +46,24 @@ export default function SearchByStatus() {
         {showDropdown && (
           <div className={s.dropdownMenu}>
             <Typography
-              variant="h7"
+              variant="h6"
               onClick={resetStatus}
               className={s.resetText} 
+              fontSize={12}
             >
               Sort by status
             </Typography>
             {status.map((theStatus, index) => (
-              <div
+              <Box sx={{ 
+                variant:'h6',
+                fontSize:'14px',
+               }}
                 key={index}
                 className={s.menuItem}
                 onClick={() => onSelectArea({ target: { value: theStatus } })}
               >
                 {theStatus}
-              </div>
+              </Box>
             ))}
           </div>
         )}

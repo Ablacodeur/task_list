@@ -17,7 +17,9 @@ export default function Browser({taskList}) {
         backgroundRepeat: 'no-repeat',
         // zIndex: {md:1},
         position:'relative',
-        top: { xs: '-140px', sm: '-280px' }
+        top: { xs: '-140px', sm: '-280px' },
+        height:'90vh'
+
       }}
     >
        <Title />

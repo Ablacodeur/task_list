@@ -15,7 +15,7 @@ export default function CardComponent({ task }) {
             task.status === 'Completed' ? '#A0ECB1' : 
             task.status === "Won't do" ? '#F7D4D3' : 
             '#E3E8EF',
-        padding: '4px',
+        padding: '3px',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
