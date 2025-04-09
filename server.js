@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: process.env.NODE_ENV === 'production' ? '.env' : '.env.local' });
 import express from "express";
 import cors from "cors";
 import pkg from "pg"; 
@@ -9,8 +9,19 @@ const { Pool } = pkg;
 const app = express();
 
 // CORS : autoriser le frontend déployé sur Vercel à accéder à l'API
+const allowedOrigins = [
+  'https://task-list-inky.vercel.app',
+  'http://localhost:5173'
+];
+
 const corsOptions = {
-  origin: 'https://task-list-inky.vercel.app',  
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: 'GET,POST,DELETE',
 };
 app.use(cors(corsOptions));

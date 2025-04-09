@@ -65,7 +65,7 @@ export default function ModalCard() {
       };
   
       fetchData();
-  }, [taskList]); 
+  }, []); 
     
     function handleClick(task){
     setOpen(true);
