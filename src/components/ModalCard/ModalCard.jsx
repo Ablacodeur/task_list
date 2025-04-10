@@ -20,7 +20,7 @@ import 'swiper/css/pagination';
 import SwiperCore from 'swiper';
 import { Navigation } from 'swiper/modules';
 import { Pagination , A11y} from 'swiper/modules';
-
+import s from "./style.module.css";
 
 SwiperCore.use([Navigation, Pagination, A11y]);
 
@@ -336,6 +336,7 @@ export default function ModalCard() {
               <FormControl> 
                 <FormLabel sx={{ color:'GrayText'}}>Task name</FormLabel>
                 <Input
+                className={s.modalInput}
                 autoFocus
                 required
                 name='name'

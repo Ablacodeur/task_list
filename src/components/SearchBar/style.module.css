@@ -10,8 +10,8 @@
     color: #060607;
     box-shadow: 0px 4px 8px rgba(0,0,0,0.65);
 }
-
-input:focus{
+.coloredFocus:focus{
     outline: none;
     border: 3px solid #FEBD2E;
+
 }

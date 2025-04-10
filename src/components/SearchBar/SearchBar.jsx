@@ -9,7 +9,7 @@ export function SearchBar({ placeholder = "🔍 Search by name ...", onTextChang
     >
       <input
         type="text"
-        className={s.input}
+        className={`${s.input} ${s.coloredFocus}`}
         onChange={onTextChange}
         placeholder={placeholder}
         style={{ width: '100%' }} // Permet à l'input de suivre la largeur du Box
