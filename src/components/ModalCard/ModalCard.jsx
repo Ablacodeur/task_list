@@ -16,6 +16,7 @@ import { deleteTask, settaskList} from '../../store/task/task-slice';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import SwiperCore from 'swiper';
 import { Navigation } from 'swiper/modules';
 import { Pagination , A11y} from 'swiper/modules';
@@ -47,6 +48,9 @@ export default function ModalCard() {
     return matchesSearch && matchesStatus;
 });
 
+    const handlePageChange = (event, value) => {
+      setCurrentPage(value);
+    };
     const pagination = {
       clickable: true,
       renderBullet: function (index, className) {
@@ -164,7 +168,10 @@ export default function ModalCard() {
   modules={[Pagination, A11y, Navigation]}
   spaceBetween={50}
   slidesPerView={1}
-  pagination={pagination}  
+  pagination={{
+    clickable: 'true',
+    el: '.swiper-pagination', 
+  }}
   style={{
     "--swiper-pagination-color": "#090101",  
     "--swiper-pagination-bullet-inactive-color": "#999",  
@@ -256,7 +263,7 @@ export default function ModalCard() {
               </Button>           
           </Box>
 
-          {/* <div className="swiper-pagination"></div> */}
+          <div className="swiper-pagination"></div>
 
       <Modal
         open={open}
