@@ -7,3 +7,9 @@
 
 }
 
+.swiper-pagination {
+  position: relative !important;
+  margin-top: 10px;
+  display: flex !important;
+  justify-content: center;
+}

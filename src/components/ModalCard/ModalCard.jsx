@@ -11,9 +11,17 @@ import { Box, Checkbox,Typography } from "@mui/material";
 import CardComponent from "../Card/CardComponent";
 import { Grid, Textarea } from "@mui/joy";
 import axios from 'axios';
-import Pagination from '@mui/material/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteTask, settaskList} from '../../store/task/task-slice';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import SwiperCore from 'swiper';
+import { Navigation } from 'swiper/modules';
+import { Pagination , A11y} from 'swiper/modules';
+
+
+SwiperCore.use([Navigation, Pagination, A11y]);
 
 
 export default function ModalCard() {
@@ -21,9 +29,6 @@ export default function ModalCard() {
   const [theTask, setTheTask]= React.useState({});
   const [statusName,setStatusName]= React.useState('');
   const [selectedStatus, setSelectedStatus] = React.useState('');
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 4;
-
   const dispatch = useDispatch();
 
   const taskList = useSelector((store)=>store.TASK.taskList);
@@ -42,17 +47,12 @@ export default function ModalCard() {
     return matchesSearch && matchesStatus;
 });
 
-
-  // Calculer les tâches à afficher en fonction de la page actuelle
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentTasks = filteredList.slice(startIndex, endIndex);
-
-
-    const handlePageChange = (event, value) => {
-      setCurrentPage(value);
+    const pagination = {
+      clickable: true,
+      renderBullet: function (index, className) {
+        return '<span class="' + className + '">' + (index + 1) + '</span>';
+      },
     };
-    
 
   useEffect(() => {
       const fetchData = async () => {
@@ -156,33 +156,61 @@ export default function ModalCard() {
       flexDirection:'column',
       justifyContent:'center',
       alignItems:'center',
-      gap:' 15px'
-
-      }}>
-      {currentTasks.map((task,id)=>( 
+      gap:' 15px',
       
-      <Button
-        variant="outlined"
-        color="neutral"
-        // startDecorator={<Add />}
-        onClick={()=>handleClick(task)}
-        sx={{ 
-          backgroundColor: 
-            task.status === 'In Progress' ? '#F5D565' : 
-            task.status === 'Completed' ? '#A0ECB1' : 
-            task.status === "Won't do" ? '#F7D4D3' : 
-            '#E3E8EF',
-            width: { xs: '100%', sm: '600px', md: '600px', lg: '600px' }  ,      
-            height: { xs: '15%' }        
+      }}>
+<Box sx={{ width:{xs:'350px',md:'600px'}, overflow: 'visible' }}>
+<Swiper
+  modules={[Pagination, A11y, Navigation]}
+  spaceBetween={50}
+  slidesPerView={1}
+  pagination={pagination}  
+  style={{
+    "--swiper-pagination-color": "#090101",  
+    "--swiper-pagination-bullet-inactive-color": "#999",  
+    "--swiper-pagination-bullet-size": "8px",  
+    "--swiper-pagination-bullet-horizontal-gap": "6px",  
+  }}
+>
+  {Array.from({ length: Math.ceil(filteredList.length / 4) }).map((_, index) => {
+    const startIndex = index * 4;
+    const currentTasks = filteredList.slice(startIndex, startIndex + 4);
 
-        }}
-     
-              
-              >
-      <CardComponent key={id} task={task} />    
-    </Button>
-    
-    ))}
+    return (
+      <SwiperSlide key={index}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '15px'
+          }}
+        >
+          {currentTasks.map((task, id) => (
+            <Button
+              key={id}
+              variant="outlined"
+              color="neutral"
+              onClick={() => handleClick(task)}
+              sx={{
+                backgroundColor:
+                  task.status === 'In Progress' ? '#F5D565' :
+                  task.status === 'Completed' ? '#A0ECB1' :
+                  task.status === "Won't do" ? '#F7D4D3' :
+                  '#E3E8EF',
+                width: { xs: '100%', sm: '600px', md: '600px', lg: '600px' },
+                height: { xs: '15%' }
+              }}
+            >
+              <CardComponent task={task} />
+            </Button>
+          ))}
+            </Box>
+          </SwiperSlide>
+        );
+        })}
+        </Swiper>
+    </Box>
     <Button 
                 variant="outlined"
                 color='neutral'
@@ -228,13 +256,7 @@ export default function ModalCard() {
               </Button>           
           </Box>
 
-    <Pagination
-      count={Math.ceil(filteredList.length / itemsPerPage)}
-      page={currentPage}
-      onChange={handlePageChange}
-      color="primary"
-      sx={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
-    />
+          {/* <div className="swiper-pagination"></div> */}
 
       <Modal
         open={open}
