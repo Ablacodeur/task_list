@@ -8,14 +8,12 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function Browser({ taskList }) {
   // Fonction pour afficher les notifications
   const notify = (type) => {
-    if (type === 'add') {
-      toast.success('Tâche ajoutée avec succès !', {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 3000, // Ferme automatiquement après 3 secondes
-      });
-    } else if (type === 'delete') {
+    if (type === 'add') {toast.success('Tâche ajoutée avec succès !', {
+      position: 'top-center', // Utilisez une chaîne de caractères
+      autoClose: 3000, // Ferme automatiquement après 3 secondes
+    })} else if (type === 'delete') {
       toast.error('Tâche supprimée avec succès !', {
-        position: toast.POSITION.TOP_CENTER,
+        position: 'top-center',
         autoClose: 3000,
       });
     }
