@@ -79,12 +79,9 @@ export default function ModalCard() {
       
     }}
     function statusClick(event) {
-      console.log(event.target.value);
       const clickedStatus = event.currentTarget.getAttribute('name'); 
       const statusIcon = event.currentTarget.querySelector('img')?.src;
-          console.log(statusIcon);
       
-      console.log("Clicked status:", clickedStatus);
     
       if (clickedStatus) {
         setSelectedStatus(clickedStatus);
