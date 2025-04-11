@@ -115,7 +115,7 @@ export default function ModalCard() {
               await axios.delete(`${import.meta.env.VITE_API_URL}/tasks/${taskId}`);
               
               dispatch(deleteTask(taskId)); // Utilise l'ID au lieu de recréer une liste
-
+              setGlobalAlert('delete');
               setOpen(false);
           } catch (error) {
               console.error("Erreur lors de la suppression de la tâche :", error);
@@ -320,7 +320,7 @@ export default function ModalCard() {
                 try {
                     const response = await axios.post(`${import.meta.env.VITE_API_URL}/tasks`, theTask);
                     console.log('Tâche soumise avec succès :', response.data);
-                    
+                    setGlobalAlert('add');
                     dispatch(settaskList([...taskList, response.data])); // Mise à jour immédiate du store
                     
                     setOpen(false); 
