@@ -10,12 +10,12 @@ export default function Browser({ taskList }) {
   const notify = (type) => {
     if (type === 'add') {
       toast.success('Tâche ajoutée avec succès !', {
-        position: toast.POSITION.TOP_CENTER,
+       position: 'top-center',
         autoClose: 3000, // Ferme automatiquement après 3 secondes
       });
     } else if (type === 'delete') {
       toast.error('Tâche supprimée avec succès !', {
-        position: toast.POSITION.TOP_CENTER,
+        position: 'top-center',
         autoClose: 3000,
       });
     }

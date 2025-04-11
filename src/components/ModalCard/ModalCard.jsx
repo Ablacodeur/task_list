@@ -25,7 +25,7 @@ import s from "./style.module.css";
 SwiperCore.use([Navigation, Pagination, A11y]);
 
 
-export default function ModalCard() {
+export default function ModalCard({setGlobalAlert}) {
   const [open, setOpen] = React.useState(false);
   const [theTask, setTheTask]= React.useState({});
   const [statusName,setStatusName]= React.useState('');
