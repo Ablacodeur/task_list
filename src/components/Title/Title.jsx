@@ -1,14 +1,15 @@
 import { Button, Input, Stack, Textarea } from '@mui/joy'
 import { Box, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Pencil } from 'react-bootstrap-icons'
 import { useDispatch, useSelector } from 'react-redux';
 import { settitle } from '../../store/task/title_slice';
-
+import { gsap } from 'gsap';
 export default function Title() {
 
     const dispatch = useDispatch();
     const [isEditable,setIsEditable]= useState(false);
+    const titleRef = useRef(null);
 
     function handleClick(){
         setIsEditable(!isEditable)
@@ -24,7 +25,23 @@ export default function Title() {
         const { name, value } = e.target;  
         dispatch(settitle({ [name]: value }));      
     }
-
+    // Animation du titre 
+    useEffect(() => {
+        if (titleRef.current) {
+            const letters = titleRef.current.querySelectorAll(".letter");
+            gsap.fromTo(
+              letters, // Sélectionne toutes les lettres
+              { y: 30, opacity: 0 }, // Départ : en bas (y: 30px) et invisible (opacity: 0)
+              { 
+                  y: 0, // Arrive à sa position normale
+                  opacity: 1, // Devient visible
+                  duration: 1, // Durée de l'animation (1 seconde)
+                  ease: 'elastic.out(1, 0.5)', // Effet de rebond élastique
+                  stagger: 0.1 // Délai entre chaque lettre (100ms entre chaque animation)
+              }
+          );
+                  }
+    }, [theTitle]);
 
 
   
@@ -64,14 +81,17 @@ export default function Title() {
 
         <>
 
-        <Typography variant="h4" sx={{ textAlign:'start', fontSize: { xs: '1.2rem', sm: '2rem' } }}>
-        {theTitle.title}
+       <Stack sx={{ flexDirection: 'row' }}>
+        <Typography ref={titleRef} variant="h4" sx={{ textAlign:'start', fontSize: { xs: '1.2rem', sm: '2rem' } }}>
+        {theTitle.title.split("").map((char, index) => (
+                    <span key={index} className="letter">{char}</span>
+                ))}
+        </Typography>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={handleClick}>
         <path d="M13.5 5.5L6.45321 12.5468C6.22845 12.7716 6.11607 12.8839 6.04454 13.0229C5.97301 13.1619 5.94689 13.3187 5.89463 13.6322L5.11508 18.3095C5.06262 18.6243 5.03639 18.7817 5.12736 18.8726C5.21833 18.9636 5.37571 18.9374 5.69048 18.8849L10.3678 18.1054L10.3678 18.1054C10.6813 18.0531 10.8381 18.027 10.9771 17.9555C11.1161 17.8839 11.2284 17.7716 11.4532 17.5468L11.4532 17.5468L18.5 10.5C19.5171 9.48295 20.0256 8.97442 20.1384 8.36277C20.1826 8.12295 20.1826 7.87705 20.1384 7.63723C20.0256 7.02558 19.5171 6.51705 18.5 5.5C17.4829 4.48295 16.9744 3.97442 16.3628 3.8616C16.1229 3.81737 15.8771 3.81737 15.6372 3.8616C15.0256 3.97442 14.5171 4.48294 13.5 5.5Z" fill="#030616" fill-opacity="0.25"/>
         <path d="M12.2929 6.70711L6.45321 12.5468C6.22845 12.7716 6.11607 12.8839 6.04454 13.0229C5.97301 13.1619 5.94689 13.3187 5.89463 13.6322L5.11508 18.3095C5.06262 18.6243 5.03639 18.7817 5.12736 18.8726C5.21833 18.9636 5.37571 18.9374 5.69048 18.8849L10.3678 18.1054L10.3678 18.1054C10.6813 18.0531 10.8381 18.027 10.9771 17.9555C11.1161 17.8839 11.2284 17.7716 11.4532 17.5468L11.4532 17.5468L17.2929 11.7071C17.6262 11.3738 17.7929 11.2071 17.7929 11C17.7929 10.7929 17.6262 10.6262 17.2929 10.2929L17.2929 10.2929L13.7071 6.70711C13.3738 6.37377 13.2071 6.20711 13 6.20711C12.7929 6.20711 12.6262 6.37377 12.2929 6.70711Z" fill="#030616"/>
         </svg>
-        </Typography>
-
+        </Stack>    
         <Typography variant="h6" sx={{textAlign:'start', opacity: 0.7, fontSize: { xs: '0.9rem', sm: '1.2rem' } }}>{theTitle.description}  </Typography>
         </>
     }
