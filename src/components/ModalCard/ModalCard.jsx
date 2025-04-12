@@ -59,7 +59,7 @@ export default function ModalCard({setGlobalAlert}) {
       };
   
       fetchData();
-  }, [taskList]); 
+  }, []); 
 
     
     function handleClick(task){
