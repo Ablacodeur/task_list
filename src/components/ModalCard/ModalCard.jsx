@@ -35,7 +35,7 @@ export default function ModalCard({setGlobalAlert}) {
   const taskList = useSelector((store)=>store.TASK.taskList);
   const userSearch  = useSelector((store)=>store.SEARCH.theSearch);
   const searchByStatus = useSelector((store)=>store.SEARCH.theStatus);
-
+  const [reload, setReload] = React.useState(false);
   
   const filteredList = taskList.filter((task) => {
     const containsTitle = task.name.toUpperCase().includes(userSearch.trim().toUpperCase());
@@ -113,7 +113,23 @@ export default function ModalCard({setGlobalAlert}) {
           }
       }
     }
+// Fonction pour recharger les tâches
+const reloadTasks = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/tasks`);
+    dispatch(settaskList(response.data)); // Met à jour la liste des tâches dans le store Redux
+  } catch (err) {
+    console.error('Erreur lors du rechargement des tâches :', err);
+  }
+};
 
+// Utilisation de useEffect pour surveiller l'état reload
+useEffect(() => {
+  if (reload) {
+    reloadTasks();
+    setReload(false); // Réinitialise l'état après le rechargement
+  }
+}, [reload]);
         
     // Utilisation de useEffect pour surveiller les changements de selectedStatus
     React.useEffect(() => {
@@ -311,9 +327,11 @@ export default function ModalCard({setGlobalAlert}) {
                 try {
                     const response = await axios.post(`${import.meta.env.VITE_API_URL}/tasks`, theTask);
                     console.log('Tâche soumise avec succès :', response.data);
-                    setGlobalAlert('add');
+                    (`${import.meta.env.VITE_API_URL}/tasks`)
+                   
                     dispatch(settaskList([...taskList, response.data])); // Mise à jour immédiate du store
-                    
+                    setReload(true);
+                    setGlobalAlert('add');
                     setOpen(false); 
                   } catch (error) {
                     console.error('Erreur lors de la soumission :', error);
