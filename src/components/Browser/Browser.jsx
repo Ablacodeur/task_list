@@ -5,7 +5,7 @@ import Title from '../Title/Title';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function Browser({ taskList }) {
+export default function Browser() {
   // Fonction pour afficher les notifications
   const notify = (type) => {
     if (type === 'add') {
@@ -54,7 +54,6 @@ export default function Browser({ taskList }) {
         >
           {/* Passe la fonction notify à ModalCard */}
           <ModalCard
-            taskList_={taskList}
             setGlobalAlert={(alertType) => notify(alertType)}
           />
         </Stack>

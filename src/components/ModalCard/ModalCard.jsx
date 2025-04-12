@@ -48,16 +48,6 @@ export default function ModalCard({setGlobalAlert}) {
     return matchesSearch && matchesStatus;
 });
 
-    const handlePageChange = (event, value) => {
-      setCurrentPage(value);
-    };
-    const pagination = {
-      clickable: true,
-      renderBullet: function (index, className) {
-        return '<span class="' + className + '">' + (index + 1) + '</span>';
-      },
-    };
-
   useEffect(() => {
       const fetchData = async () => {
           try {
@@ -69,7 +59,8 @@ export default function ModalCard({setGlobalAlert}) {
       };
   
       fetchData();
-  }, []); 
+  }, [taskList]); 
+
     
     function handleClick(task){
     setOpen(true);
