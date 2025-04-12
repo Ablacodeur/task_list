@@ -93,8 +93,8 @@ export default function ModalCard({setGlobalAlert}) {
     const { name, value } = e.target;
 
     dispatch(setTheTask({
-        ...theTask,  // Récupère les valeurs précédentes
-        [name]: value // Met à jour uniquement le champ modifié
+        ...theTask,  
+        [name]: value
     }));
     
     console.log(`Updated ${name}:`, value);
@@ -105,39 +105,39 @@ export default function ModalCard({setGlobalAlert}) {
           try {
               await axios.delete(`${import.meta.env.VITE_API_URL}/tasks/${taskId}`);
               
-              dispatch(deleteTask(taskId)); // Utilise l'ID au lieu de recréer une liste
-              setGlobalAlert('delete');
+              dispatch(deleteTask(taskId)); 
+              setReload(true);
               setOpen(false);
+              setGlobalAlert('delete');
           } catch (error) {
               console.error("Erreur lors de la suppression de la tâche :", error);
           }
       }
     }
-// Fonction pour recharger les tâches
-const reloadTasks = async () => {
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/tasks`);
-    dispatch(settaskList(response.data)); // Met à jour la liste des tâches dans le store Redux
-  } catch (err) {
-    console.error('Erreur lors du rechargement des tâches :', err);
-  }
-};
+          // Fonction pour recharger les tâches
+          const reloadTasks = async () => {
+            try {
+              const response = await axios.get(`${import.meta.env.VITE_API_URL}/tasks`);
+              dispatch(settaskList(response.data)); 
+            } catch (err) {
+              console.error('Erreur lors du rechargement des tâches :', err);
+            }
+          };
 
-// Utilisation de useEffect pour surveiller l'état reload
-useEffect(() => {
-  if (reload) {
-    reloadTasks();
-    setReload(false); // Réinitialise l'état après le rechargement
-  }
-}, [reload]);
+          // Utilisation de useEffect pour surveiller l'état reload
+          useEffect(() => {
+            if (reload) {
+              reloadTasks();
+              setReload(false); 
+            }
+          }, [reload]);
         
     // Utilisation de useEffect pour surveiller les changements de selectedStatus
     React.useEffect(() => {
       if (selectedStatus) {
         console.log("Updated selectedStatus:", selectedStatus);
       }
-    }, [selectedStatus]); // Se déclenche à chaque changement de selectedStatus
-
+    }, [selectedStatus]); 
 
     
   React.useEffect(() => {
@@ -331,8 +331,8 @@ useEffect(() => {
                    
                     dispatch(settaskList([...taskList, response.data])); // Mise à jour immédiate du store
                     setReload(true);
-                    setGlobalAlert('add');
                     setOpen(false); 
+                    setGlobalAlert('add');
                   } catch (error) {
                     console.error('Erreur lors de la soumission :', error);
                   }
